@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VAGEX - Página Administrativa</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+        margin: 0;
+      }
+      .admin-panel {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      .admin-panel h2 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+      .admin-button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+      .admin-button:hover {
+        background-color: #0056b3;
+      }
+      .admin-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+      header {
+        width: 100%;
+        background-color: #333;
+        color: white;
+        padding: 15px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+      }
+      header h1 {
+        margin-left: 20px;
+      }
+      nav ul {
+        list-style-type: none;
+        margin-right: 20px;
+        display: flex;
+      }
+      nav ul li {
+        margin-left: 20px;
+      }
+      nav ul li a {
+        color: white;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>VAGEX</h1>
+      <nav>
+        <ul>
+          <li><a href="./vagas.html">Vagas</a></li>
+          <li><a href="./sobre.html">Sobre</a></li>
+          <li><a href="./admin.html">Admin</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="admin-panel">
+      <h2>Painel Administrativo</h2>
+      <button
+        class="admin-button"
+        id="btnSearch"
+        disabled
+        onclick="consultarVagas()"
+      >
+        Consultar Vagas
+      </button>
+      <button
+        class="admin-button"
+        id="btnClassify"
+        disabled
+        onclick="classificarVagas()"
+      >
+        Classificar Vagas
+      </button>
+
+      <p>Última consulta: <span id="lastSearch">...</span></p>
+      <p>Última classificação: <span id="lastClassification">...</span></p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+      function consultarVagas() {
+        $("#btnSearch").prop("disabled", true);
+        let search = fetch("http://localhost:4000/jobs/search", {
+          method: "POST",
+        });
+        search.then((response) => {
+          if (response.ok) {
+            alert("Consulta em progresso");
+            $("#lastSearch").text("Em andamento");
+          } else {
+            alert("Erro ao realizar consulta.");
+          }
+        });
+      }
+
+      function classificarVagas() {
+        $("#btnClassify").prop("disabled", true);
+        let classification = fetch("http://localhost:4000/jobs/classify", {
+          method: "POST",
+        });
+        classification.then((response) => {
+          if (response.ok) {
+            alert("Classificação em progresso");
+            $("#lastClassification").text("Em andamento");
+          } else {
+            alert("Erro ao realizar classificação.");
+          }
+        });
+      }
+
+      $(document).ready(async () => {
+        let lastClassification = await fetch(
+          "http://localhost:4000/jobs/last-classification"
+        );
+        lastClassification = await lastClassification.json();
+        let lastSearch = await fetch("http://localhost:4000/jobs/last-search");
+        lastSearch = await lastSearch.json();
+
+        if (lastClassification.length == 0) {
+          $("#lastClassification").text("Nunca classificado");
+          $("#btnClassify").prop("disabled", false);
+        } else if (lastClassification[0]?.data == null) {
+          $("#lastClassification").text("Em andamento");
+        } else {
+          $("#lastClassification").text(
+            new Date(lastClassification[0].data).toLocaleString()
+          );
+          $("#btnClassify").prop("disabled", false);
+        }
+
+        if (lastSearch.length == 0) {
+          $("#lastSearch").text("Nunca consultado");
+          $("#btnSearch").prop("disabled", false);
+        } else if (lastSearch[0]?.data == null) {
+          $("#lastSearch").text("Em andamento");
+        } else {
+          $("#lastSearch").text(new Date(lastSearch[0].data).toLocaleString());
+          $("#btnSearch").prop("disabled", false);
+        }
+      });
+    </script>
+  </body>
+</html>

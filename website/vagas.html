@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VAGEX - Feed de Vagas de Emprego</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .site {
+        padding-top: 30px;
+        display: flex;
+      }
+
+      .container {
+        display: flex;
+        width: 100%;
+      }
+
+      .job-list {
+        flex: 3;
+        padding: 20px;
+      }
+
+      .filters {
+        flex: 1;
+        padding: 20px;
+        background-color: #f0f0f0;
+      }
+
+      .tag {
+        display: inline-block;
+        padding: 5px 10px;
+        background-color: #e0e0e0;
+        margin-right: 5px;
+        border-radius: 4px;
+      }
+
+      #clear-filters {
+        margin-bottom: 10px;
+        padding: 5px 10px;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      .job {
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 8px;
+        background-color: #ffffff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+
+        > h3 {
+          cursor: pointer;
+        }
+      }
+
+      .job:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .job h3 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .job p {
+        color: #666;
+        font-size: 0.9em;
+        margin-bottom: 10px;
+      }
+
+      .job-details {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        border-top: 1px dashed #e0e0e0;
+        padding-top: 10px;
+        margin-top: 10px;
+      }
+
+      .detail {
+        display: flex;
+        align-items: center;
+        background: #f5f5f5;
+        padding: 5px 10px;
+        border-radius: 20px;
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+        font-size: 0.85em;
+        color: #4a4a4a;
+      }
+
+      .detail i {
+        margin-right: 5px;
+        color: #007bff;
+      }
+
+      .icon-company {
+        color: #ff4500;
+      }
+      .icon-salary {
+        color: #9acd32;
+      }
+      .icon-location {
+        color: #1e90ff;
+      }
+      .icon-hierarchy {
+        color: #8b008b;
+      }
+
+      .description-details {
+        margin-bottom: 10px;
+      }
+
+      .read-more {
+        background: none;
+        border: none;
+        color: #007bff;
+        cursor: pointer;
+        font-size: 0.9em;
+        margin-top: 5px;
+      }
+
+      .read-more:hover {
+        text-decoration: underline;
+      }
+
+      header {
+        width: 100%;
+        background-color: #333;
+        color: white;
+        padding: 15px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+      }
+      header h1 {
+        margin-left: 20px;
+      }
+      nav ul {
+        list-style-type: none;
+        margin-right: 20px;
+        display: flex;
+      }
+      nav ul li {
+        margin-left: 20px;
+      }
+      nav ul li a {
+        color: white;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>VAGEX</h1>
+      <nav>
+        <ul>
+          <li><a href="./vagas.html">Vagas</a></li>
+          <li><a href="./sobre.html">Sobre</a></li>
+          <li><a href="./admin.html">Admin</a></li>
+        </ul>
+      </nav>
+    </header>
+    <div class="site">
+      <div class="container">
+        <div class="job-list">
+          <h2>Vagas de Emprego</h2>
+        </div>
+        <div class="filters">
+          <h2>Filtrar Categorias</h2>
+          <div>
+            <button id="clear-filters">Limpar Filtros</button>
+          </div>
+          <div class="categories-list"></div>
+        </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+      $(document).ready(async () => {
+        let request = await fetch("http://localhost:4000/jobs");
+        let jobs = await request.json();
+        const jobList = $(".job-list");
+        const categoriesList = $(".categories-list");
+        let categories = [];
+
+        jobs.forEach((job, i) => {
+          let truncatedDescription =
+            job.descricao.length > 100
+              ? job.descricao.slice(0, 100) + "..."
+              : job.descricao;
+          let fullDescription = job.descricao;
+
+          const jobElement = $(`
+          <div class="job">
+            <div class="job-details">
+              <span class="detail"><i class="fa-solid fa-building icon-company"></i> ${
+                job.empresa ?? "-"
+              }</span>
+              <span class="detail"><i class="fa-solid fa-dollar-sign icon-salary"></i> ${
+                job.salario?.max != null
+                  ? job.salario.min
+                    ? "R$" + job.salario.min - "R$" + job.salario.max
+                    : "R$" + job.salario.max
+                  : "-"
+              }</span>
+              <span class="detail"><i class="fa-solid fa-location-dot icon-location"></i> ${
+                job.local ?? " - "
+              }</span>
+              <span class="detail"><i class="fa-solid fa-sitemap icon-hierarchy"></i> ${
+                job.hierarquia ?? "-"
+              }</span>
+            </div>
+            <h3 onclick="window.open('${job.url}')">${job.titulo}</h3>
+            <div class="description-details">
+              <p class="description">${truncatedDescription}<span class="full-description" style="display: none;">${fullDescription}</span></p>
+              <button class="read-more">Leia Mais</button>
+            </div>
+          </div>
+        `);
+
+          job.tags?.forEach((tag) => {
+            const tagElement = $(`
+              <span class="tag">${tag}</span>
+            `);
+            jobElement.append(tagElement);
+
+            if (!categories.includes(tag)) {
+              categories.push(tag);
+            }
+          });
+
+          jobList.append(jobElement);
+          jobElement.find(".read-more").click(function () {
+            const $this = $(this);
+            const description = $this.prev(".description");
+            const fullDesc = description.find(".full-description");
+            description.html(fullDescription);
+            fullDesc.show();
+            $this.remove();
+          });
+        });
+
+        categories.forEach((category) => {
+          categoriesList.append(`<input type="checkbox" class="category" id="${category}" name="${category}" value="${category}" />
+            <label for="${category}">${category}</label><br />`);
+        });
+
+        $(".category").change(function () {
+          const selectedCategories = $(".category:checked")
+            .map(function () {
+              return $(this).val();
+            })
+            .get();
+
+          $(".job").each(function () {
+            const jobElement = $(this);
+            const jobCategories = jobElement
+              .find(".tag")
+              .map(function () {
+                return $(this).text();
+              })
+              .get();
+
+            if (selectedCategories.length === 0) {
+              jobElement.show();
+              return;
+            }
+
+            if (
+              selectedCategories.some((category) =>
+                jobCategories.includes(category)
+              )
+            ) {
+              jobElement.show();
+            } else {
+              jobElement.hide();
+            }
+          });
+        });
+
+        $("#clear-filters").click(function () {
+          $(".category").prop("checked", false);
+          $(".job").show();
+        });
+      });
+    </script>
+  </body>
+</html>

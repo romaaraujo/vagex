@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VAGEX - Autenticação Administrativa</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+        margin: 0;
+      }
+      .admin-panel {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 300px;
+      }
+      .admin-panel h2 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+      .form-control {
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .admin-button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+        width: 100%;
+      }
+      .admin-button:hover {
+        background-color: #0056b3;
+      }
+      header {
+        width: 100%;
+        background-color: #333;
+        color: white;
+        padding: 15px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+      }
+      header h1 {
+        margin-left: 20px;
+      }
+      nav ul {
+        list-style-type: none;
+        margin-right: 20px;
+        display: flex;
+      }
+      nav ul li {
+        margin-left: 20px;
+      }
+      nav ul li a {
+        color: white;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>VAGEX</h1>
+      <nav>
+        <ul>
+          <li><a href="./vagas.html">Vagas</a></li>
+          <li><a href="./sobre.html">Sobre</a></li>
+          <li><a href="./admin.html">Admin</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="admin-panel">
+      <h2>Login Administrativo</h2>
+      <form id="loginForm">
+        <input
+          type="text"
+          id="username"
+          name="username"
+          class="form-control"
+          placeholder="Usuário"
+          required
+        />
+        <input
+          type="password"
+          id="password"
+          name="password"
+          class="form-control"
+          placeholder="Senha"
+          required
+        />
+        <button type="submit" class="admin-button">Entrar</button>
+      </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(() => {
+        $("#loginForm").submit(function (event) {
+          event.preventDefault();
+          let username = $("#username").val();
+          let password = $("#password").val();
+
+          fetch("http://localhost:4000/admin/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: username,
+              password: password,
+            }),
+          })
+            .then((response) => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error("Falha na autenticação");
+              }
+            })
+            .then((data) => {
+              if (data.success) {
+                alert("Login bem-sucedido!");
+                window.location.href = "./admin-dashboard.html";
+              } else {
+                alert("Usuário ou senha incorretos.");
+              }
+            })
+            .catch((error) => {
+              console.error("Erro:", error);
+              alert("Ocorreu um erro durante o login.");
+            });
+        });
+      });
+    </script>
+  </body>
+</html>

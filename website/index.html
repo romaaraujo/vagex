@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VAGEX - Encontre sua Vaga</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+      }
+      header {
+        width: 100%;
+        background-color: #333;
+        color: white;
+        padding: 15px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+      }
+      header h1 {
+        margin-left: 20px;
+      }
+      nav ul {
+        list-style-type: none;
+        margin-right: 20px;
+        display: flex;
+      }
+      nav ul li {
+        margin-left: 20px;
+      }
+      nav ul li a {
+        color: white;
+        text-decoration: none;
+      }
+      .content {
+        max-width: 1200px;
+        margin: 100px auto 20px;
+        padding: 20px;
+      }
+      .hero {
+        text-align: center;
+        padding-top: 60px;
+      }
+      .hero h2 {
+        color: #333;
+      }
+      .cta-button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 20px 5px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+      .cta-button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>VAGEX</h1>
+      <nav>
+        <ul>
+          <li><a href="./vagas.html">Vagas</a></li>
+          <li><a href="./sobre.html">Sobre</a></li>
+          <li><a href="./admin.html">Admin</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="content">
+      <section class="hero">
+        <h2>Encontre a Vaga Perfeita para Você</h2>
+        <p>
+          Bem-vindo ao VAGEX, o seu portal de empregos onde você pode encontrar
+          oportunidades de carreira em diversas áreas!
+        </p>
+        <a href="./vagas.html" class="cta-button">Pesquisar Vagas</a>
+      </section>
+
+      <section id="vagas">
+        <h2>Vagas Disponíveis</h2>
+        <p>
+          Aqui você encontra uma lista das vagas mais recentes em diversas áreas
+          de atuação.
+        </p>
+      </section>
+
+      <section id="sobre">
+        <h2>Sobre Nós</h2>
+        <p>
+          O VAGEX foi criado com o objetivo de conectar talentos a empresas de
+          forma eficiente e rápida, oferecendo um ambiente seguro e intuitivo
+          para a busca de empregos.
+        </p>
+      </section>
+    </div>
+  </body>
+</html>
