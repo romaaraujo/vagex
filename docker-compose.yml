@@ -1,0 +1,51 @@
+services:
+  website:
+    build: ./website
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  backend:
+    build: ./website/backend
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongo
+    networks:
+      - mongo_network
+
+  scrapers:
+    build: ./scraper
+    depends_on:
+      - mongo
+    networks:
+      - mongo_network
+
+  gcp-ai:
+    build: ./gcp-ai-natural-language
+    depends_on:
+      - mongo
+    networks:
+      - mongo_network
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpassword
+      MONGO_INITDB_DATABASE: vagas
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - mongo_network
+
+volumes:
+  mongo_data:
+
+networks:
+  mongo_network:
+    driver: bridge

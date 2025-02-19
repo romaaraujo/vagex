@@ -1,8 +1,9 @@
 const vagasComBr = require('./vagasComBr');
 const solides = require('./solides');
+const portalAbre = require('./portalabre');
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
-const uri = "mongodb+srv://romario:qypZsfQuoDCurCdl@cluster0.ywmvhsu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = "mongodb://admin:adminpassword@mongo:27017/vagas?authSource=admin";
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -40,10 +41,12 @@ let execute = (async () => {
     let vagas = [];
     let v1 = vagasComBr.scrap();
     let v2 = solides.scrap();
+    let v3 = portalAbre.scrap();
 
-    await Promise.all([v1, v2]).then(values => {
+    await Promise.all([v1, v2, v3]).then(values => {
         vagas.push(...values[0]);
         vagas.push(...values[1]);
+        vagas.push(...values[2]);
     }).then(async () => {
         await client.db("vagas")
             .collection("vagas_scraping")

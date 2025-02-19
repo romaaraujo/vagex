@@ -92,16 +92,16 @@
       <form id="loginForm">
         <input
           type="text"
-          id="username"
-          name="username"
+          id="nome"
+          name="nome"
           class="form-control"
           placeholder="Usuário"
           required
         />
         <input
           type="password"
-          id="password"
-          name="password"
+          id="senha"
+          name="senha"
           class="form-control"
           placeholder="Senha"
           required
@@ -113,20 +113,21 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       $(document).ready(() => {
+        if (localStorage.getItem("token")) {
+          window.location.href = "./admin.html";
+        }
+
         $("#loginForm").submit(function (event) {
           event.preventDefault();
-          let username = $("#username").val();
-          let password = $("#password").val();
+          let nome = $("#nome").val();
+          let senha = $("#senha").val();
 
-          fetch("http://localhost:4000/admin/login", {
+          fetch("http://localhost:4000/auth", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              username: username,
-              password: password,
-            }),
+            body: JSON.stringify({ nome, senha }),
           })
             .then((response) => {
               if (response.ok) {
@@ -136,16 +137,16 @@
               }
             })
             .then((data) => {
-              if (data.success) {
-                alert("Login bem-sucedido!");
-                window.location.href = "./admin-dashboard.html";
+              if (data.token) {
+                localStorage.setItem("token", data.token);
+                window.location.href = "./admin.html";
               } else {
                 alert("Usuário ou senha incorretos.");
               }
             })
             .catch((error) => {
               console.error("Erro:", error);
-              alert("Ocorreu um erro durante o login.");
+              alert(error);
             });
         });
       });

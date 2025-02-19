@@ -5,109 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VAGEX - Feed de Vagas de Emprego</title>
     <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <style>
       body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
+        padding-top: 56px;
       }
-
-      .site {
-        padding-top: 30px;
-        display: flex;
-      }
-
-      .container {
-        display: flex;
-        width: 100%;
-      }
-
-      .job-list {
-        flex: 3;
-        padding: 20px;
-      }
-
-      .filters {
-        flex: 1;
-        padding: 20px;
-        background-color: #f0f0f0;
-      }
-
-      .tag {
-        display: inline-block;
-        padding: 5px 10px;
-        background-color: #e0e0e0;
-        margin-right: 5px;
-        border-radius: 4px;
-      }
-
-      #clear-filters {
-        margin-bottom: 10px;
-        padding: 5px 10px;
-        background-color: #f0f0f0;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        cursor: pointer;
-        width: 100%;
-      }
-
-      .job {
-        border: 1px solid #ddd;
-        margin-bottom: 10px;
-        padding: 10px;
-        border-radius: 8px;
-        background-color: #ffffff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      .job-card {
         transition: all 0.3s ease;
-
-        > h3 {
-          cursor: pointer;
-        }
       }
-
-      .job:hover {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      .job-card:hover {
         transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
       }
-
-      .job h3 {
+      .job-title {
+        cursor: pointer;
         color: #333;
-        margin-bottom: 10px;
       }
-
-      .job p {
-        color: #666;
-        font-size: 0.9em;
-        margin-bottom: 10px;
-      }
-
-      .job-details {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 10px;
-        border-top: 1px dashed #e0e0e0;
-        padding-top: 10px;
-        margin-top: 10px;
-      }
-
-      .detail {
-        display: flex;
+      .detail-badge {
+        background-color: #f8f9fa;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        display: inline-flex;
         align-items: center;
-        background: #f5f5f5;
-        padding: 5px 10px;
-        border-radius: 20px;
-        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
-        font-size: 0.85em;
-        color: #4a4a4a;
+        padding: 0.5rem 0.8rem;
+        line-height: 1;
+        color: rgba(0, 0, 0, 0.8);
       }
-
-      .detail i {
+      .detail-badge i {
         margin-right: 5px;
-        color: #007bff;
       }
 
       .icon-company {
@@ -122,90 +52,123 @@
       .icon-hierarchy {
         color: #8b008b;
       }
-
-      .description-details {
-        margin-bottom: 10px;
-      }
-
-      .read-more {
-        background: none;
-        border: none;
-        color: #007bff;
-        cursor: pointer;
-        font-size: 0.9em;
-        margin-top: 5px;
-      }
-
-      .read-more:hover {
-        text-decoration: underline;
-      }
-
-      header {
-        width: 100%;
-        background-color: #333;
-        color: white;
-        padding: 15px 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 1000;
-      }
-      header h1 {
-        margin-left: 20px;
-      }
-      nav ul {
-        list-style-type: none;
-        margin-right: 20px;
-        display: flex;
-      }
-      nav ul li {
-        margin-left: 20px;
-      }
-      nav ul li a {
-        color: white;
-        text-decoration: none;
+      .sidebar {
+        background-color: #f8f9fa;
+        height: calc(100vh - 56px);
+        top: 56px;
+        padding: 20px;
       }
     </style>
   </head>
   <body>
-    <header>
-      <h1>VAGEX</h1>
-      <nav>
-        <ul>
-          <li><a href="./vagas.html">Vagas</a></li>
-          <li><a href="./sobre.html">Sobre</a></li>
-          <li><a href="./admin.html">Admin</a></li>
-        </ul>
-      </nav>
-    </header>
-    <div class="site">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <div class="job-list">
-          <h2>Vagas de Emprego</h2>
+        <a class="navbar-brand" href="#">VAGEX</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="./vagas.html">Vagas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./sobre.html">Sobre</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./admin.html">Admin</a>
+            </li>
+          </ul>
         </div>
-        <div class="filters">
-          <h2>Filtrar Categorias</h2>
-          <div>
-            <button id="clear-filters">Limpar Filtros</button>
+      </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+      <div class="row">
+        <div class="col-md-9 pe-4">
+          <div class="job-list"></div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="sidebar">
+            <h2 class="h4 mb-4">Filtrar Categorias</h2>
+            <button id="clear-filters" class="btn btn-secondary w-100 mb-3">
+              Limpar Filtros
+            </button>
+
+            <div class="mb-3">
+              <label for="hierarchy" class="form-label">Senioridade</label>
+              <select class="form-select" name="hierarchy" id="hierarchy">
+                <option value="">Todos</option>
+              </select>
+            </div>
+
+            <hr />
+
+            <div class="mb-3">
+              <label class="form-label">Categorias</label>
+              <div class="categories-list" id="category"></div>
+            </div>
           </div>
-          <div class="categories-list"></div>
         </div>
       </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <div class="modal fade" id="reportModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Reportar Vaga</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <textarea
+                id="report-observation"
+                class="form-control"
+                rows="4"
+                placeholder="Descreva o problema..."
+              ></textarea>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancelar
+              </button>
+              <button type="button" class="btn btn-danger" id="submit-report">
+                Enviar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       $(document).ready(async () => {
         let request = await fetch("http://localhost:4000/jobs");
         let jobs = await request.json();
         const jobList = $(".job-list");
         const categoriesList = $(".categories-list");
+        const hierarchyList = $("#hierarchy");
         let categories = [];
+        let hierarchies = [];
 
-        jobs.forEach((job, i) => {
+        jobs.forEach((job) => {
           let truncatedDescription =
             job.descricao.length > 100
               ? job.descricao.slice(0, 100) + "..."
@@ -213,58 +176,103 @@
           let fullDescription = job.descricao;
 
           const jobElement = $(`
-          <div class="job">
-            <div class="job-details">
-              <span class="detail"><i class="fa-solid fa-building icon-company"></i> ${
-                job.empresa ?? "-"
-              }</span>
-              <span class="detail"><i class="fa-solid fa-dollar-sign icon-salary"></i> ${
-                job.salario?.max != null
-                  ? job.salario.min
-                    ? "R$" + job.salario.min - "R$" + job.salario.max
-                    : "R$" + job.salario.max
-                  : "-"
-              }</span>
-              <span class="detail"><i class="fa-solid fa-location-dot icon-location"></i> ${
-                job.local ?? " - "
-              }</span>
-              <span class="detail"><i class="fa-solid fa-sitemap icon-hierarchy"></i> ${
-                job.hierarquia ?? "-"
-              }</span>
+            <div class="job-card card mb-3 shadow-sm">
+              <div class="card-body">
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                  <span class="detail-badge badge rounded-pill">
+                    <i class="fa-solid fa-building icon-company"></i> ${
+                      job.empresa ?? "-"
+                    }
+                  </span>
+                  <span class="detail-badge badge rounded-pill">
+                    <i class="fa-solid fa-dollar-sign icon-salary"></i> ${
+                      job.salario?.max != null
+                        ? job.salario.min
+                          ? "R$" + job.salario.min + " - R$" + job.salario.max
+                          : "R$" + job.salario.max
+                        : "-"
+                    }
+                  </span>
+                  <span class="detail-badge badge rounded-pill">
+                    <i class="fa-solid fa-location-dot icon-location"></i> ${
+                      job.local ?? "-"
+                    }
+                  </span>
+                  <span class="detail-badge badge rounded-pill hierarchy-vagex">
+                    <i class="fa-solid fa-sitemap icon-hierarchy"></i> ${
+                      job.hierarquia ?? "-"
+                    }
+                  </span>
+                  <button class="btn btn-outline-danger btn-sm report-button" id-vaga="${
+                    job._id
+                  }">
+                    <i class="fa-solid fa-exclamation-circle"></i> Reportar
+                  </button>
+                </div>
+                <h3 class="job-title h5" onclick="window.open('${job.url}')">${
+            job.titulo
+          }</h3>
+                <div class="description-details">
+                  <p class="description mb-2">${truncatedDescription}
+                    <span class="full-description d-none">${fullDescription}</span>
+                  </p>
+                  <button class="read-more btn btn-link p-0">Leia Mais</button>
+                </div>
+              </div>
             </div>
-            <h3 onclick="window.open('${job.url}')">${job.titulo}</h3>
-            <div class="description-details">
-              <p class="description">${truncatedDescription}<span class="full-description" style="display: none;">${fullDescription}</span></p>
-              <button class="read-more">Leia Mais</button>
-            </div>
-          </div>
-        `);
+          `);
 
           job.tags?.forEach((tag) => {
             const tagElement = $(`
-              <span class="tag">${tag}</span>
+              <span class="badge bg-secondary me-1">${tag}</span>
             `);
-            jobElement.append(tagElement);
+            jobElement.find(".card-body").append(tagElement);
 
             if (!categories.includes(tag)) {
               categories.push(tag);
             }
           });
 
+          job.hierarquia = job.hierarquia?.split(" ")[0];
+          job.hierarquia = job.hierarquia?.split("/")[0];
+          hierarchies.push(job.hierarquia);
+
           jobList.append(jobElement);
-          jobElement.find(".read-more").click(function () {
-            const $this = $(this);
-            const description = $this.prev(".description");
-            const fullDesc = description.find(".full-description");
-            description.html(fullDescription);
-            fullDesc.show();
-            $this.remove();
-          });
+        });
+
+        $(".read-more").click(function () {
+          const description = $(this).siblings(".description");
+          const fullDesc = description.find(".full-description");
+          description.html(fullDesc.html());
+          $(this).remove();
+        });
+
+        hierarchies = [...new Set(hierarchies)];
+        hierarchies.forEach((hierarchy) => {
+          if (!hierarchy) return;
+          hierarchyList.append(
+            `<option value="${hierarchy}">${hierarchy}</option>`
+          );
         });
 
         categories.forEach((category) => {
-          categoriesList.append(`<input type="checkbox" class="category" id="${category}" name="${category}" value="${category}" />
-            <label for="${category}">${category}</label><br />`);
+          categoriesList.append(`
+            <div class="form-check">
+              <input class="form-check-input category" type="checkbox" id="${category}" value="${category}">
+              <label class="form-check-label" for="${category}">${category}</label>
+            </div>
+          `);
+        });
+
+        $("#hierarchy").change(function () {
+          const selectedHierarchy = $(this).val();
+          $(".job-card").each(function () {
+            const jobHierarchy = $(this).find(".hierarchy-vagex").text();
+            $(this).toggle(
+              selectedHierarchy === "" ||
+                jobHierarchy.includes(selectedHierarchy)
+            );
+          });
         });
 
         $(".category").change(function () {
@@ -274,35 +282,62 @@
             })
             .get();
 
-          $(".job").each(function () {
-            const jobElement = $(this);
-            const jobCategories = jobElement
-              .find(".tag")
+          $(".job-card").each(function () {
+            const jobCategories = $(this)
+              .find(".badge.bg-secondary")
               .map(function () {
                 return $(this).text();
               })
               .get();
 
-            if (selectedCategories.length === 0) {
-              jobElement.show();
-              return;
-            }
-
-            if (
-              selectedCategories.some((category) =>
-                jobCategories.includes(category)
-              )
-            ) {
-              jobElement.show();
-            } else {
-              jobElement.hide();
-            }
+            $(this).toggle(
+              selectedCategories.length === 0 ||
+                selectedCategories.some((category) =>
+                  jobCategories.includes(category)
+                )
+            );
           });
         });
 
         $("#clear-filters").click(function () {
           $(".category").prop("checked", false);
-          $(".job").show();
+          $("#hierarchy").val("");
+          $(".job-card").show();
+        });
+
+        const reportModal = new bootstrap.Modal(
+          document.getElementById("reportModal")
+        );
+
+        $(document).on("click", ".report-button", function () {
+          $("#reportModal").attr("id-vaga", $(this).attr("id-vaga"));
+          reportModal.show();
+        });
+
+        $("#submit-report").click(function () {
+          let observation = $("#report-observation").val();
+          if (!observation.trim()) {
+            alert("Por favor, preencha a observação antes de enviar.");
+            return;
+          }
+
+          $.ajax({
+            url: "http://localhost:4000/jobs/report",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+              observation,
+              jobId: $("#reportModal").attr("id-vaga"),
+            }),
+            success: function () {
+              alert("Denúncia enviada com sucesso!");
+              reportModal.hide();
+              $("#report-observation").val("");
+            },
+            error: function () {
+              alert("Erro ao enviar denúncia. Tente novamente.");
+            },
+          });
         });
       });
     </script>

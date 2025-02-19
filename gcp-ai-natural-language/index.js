@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
-const uri = "mongodb+srv://romario:qypZsfQuoDCurCdl@cluster0.ywmvhsu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = "mongodb://admin:adminpassword@mongo:27017/vagas?authSource=admin";
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
