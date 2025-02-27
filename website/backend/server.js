@@ -22,7 +22,7 @@ app.get('/jobs', async (req, res) => {
     await client.connect();
     let vagas = await client.db("vagas")
         .collection("vagas_scraping")
-        .find({ ia_categorias: { $ne: null } })
+        .find({ ia_categorias: { $ne: null }, "salario.max": { $ne: null } })
         .toArray();
 
     let traducaoCategorias = require('./translate-categories.json');
