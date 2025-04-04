@@ -4,7 +4,7 @@ const cors = require('cors');
 const uuid = require('uuid');
 
 const app = express();
-const uri = "mongodb://admin:adminpassword@localhost:27017/vagas?authSource=admin";
+const uri = "mongodb://admin:adminpassword@mongo:27017/vagas?authSource=admin";
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,

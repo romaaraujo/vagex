@@ -176,56 +176,56 @@
           let fullDescription = job.descricao;
 
           const jobElement = $(`
-            <div class="job-card card mb-3 shadow-sm">
-              <div class="card-body">
-                <div class="d-flex flex-wrap gap-2 mb-3">
-                  <span class="detail-badge badge rounded-pill">
-                    <i class="fa-solid fa-building icon-company"></i> ${
-                      job.empresa ?? "-"
-                    }
-                  </span>
-                  <span class="detail-badge badge rounded-pill">
-                    <i class="fa-solid fa-dollar-sign icon-salary"></i> ${
-                      job.salario?.max != null
-                        ? job.salario.min
-                          ? "R$" + job.salario.min + " - R$" + job.salario.max
-                          : "R$" + job.salario.max
-                        : "-"
-                    }
-                  </span>
-                  <span class="detail-badge badge rounded-pill">
-                    <i class="fa-solid fa-location-dot icon-location"></i> ${
-                      job.local ?? "-"
-                    }
-                  </span>
-                  <span class="detail-badge badge rounded-pill hierarchy-vagex">
-                    <i class="fa-solid fa-sitemap icon-hierarchy"></i> ${
-                      job.hierarquia ?? "-"
-                    }
-                  </span>
-                  <button class="btn btn-outline-danger btn-sm report-button" id-vaga="${
-                    job._id
-                  }">
-                    <i class="fa-solid fa-exclamation-circle"></i> Reportar
-                  </button>
-                </div>
-                <h3 class="job-title h5" onclick="window.open('${job.url}')">${
+        <div class="job-card card mb-3 shadow-sm">
+          <div class="card-body">
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <span class="detail-badge badge rounded-pill">
+            <i class="fa-solid fa-building icon-company"></i> ${
+              job.empresa ?? "-"
+            }
+            </span>
+            <span class="detail-badge badge rounded-pill">
+            <i class="fa-solid fa-dollar-sign icon-salary"></i> ${
+              job.salario?.max != null
+                ? job.salario.min
+                  ? "R$" + job.salario.min + " - R$" + job.salario.max
+                  : "R$" + job.salario.max
+                : "-"
+            }
+            </span>
+            <span class="detail-badge badge rounded-pill">
+            <i class="fa-solid fa-location-dot icon-location"></i> ${
+              job.local ?? "-"
+            }
+            </span>
+            <span class="detail-badge badge rounded-pill hierarchy-vagex">
+            <i class="fa-solid fa-sitemap icon-hierarchy"></i> ${
+              job.hierarquia ?? "-"
+            }
+            </span>
+            <button class="btn btn-outline-danger btn-sm report-button" id-vaga="${
+              job._id
+            }">
+            <i class="fa-solid fa-exclamation-circle"></i> Reportar
+            </button>
+          </div>
+          <h3 class="job-title h5" onclick="window.open('${job.url}')">${
             job.titulo
           }</h3>
-                <div class="description-details">
-                  <p class="description mb-2">${truncatedDescription}
-                    <span class="full-description d-none">${fullDescription}</span>
-                  </p>
-                  <button class="read-more btn btn-link p-0">Leia Mais</button>
-                </div>
-              </div>
-            </div>
-          `);
+          <div class="description-details">
+            <p class="description mb-2">${truncatedDescription}
+            <span class="full-description d-none">${fullDescription}</span>
+            </p>
+            <button class="read-more btn btn-link p-0">Leia Mais</button>
+          </div>
+          </div>
+        </div>
+        `);
 
           job.tags?.forEach((tag) => {
             const tagElement = $(`
-              <span class="badge bg-secondary me-1">${tag}</span>
-            `);
+          <span class="badge bg-secondary me-1">${tag}</span>
+        `);
             jobElement.find(".card-body").append(tagElement);
 
             if (!categories.includes(tag)) {
@@ -257,25 +257,15 @@
 
         categories.forEach((category) => {
           categoriesList.append(`
-            <div class="form-check">
-              <input class="form-check-input category" type="checkbox" id="${category}" value="${category}">
-              <label class="form-check-label" for="${category}">${category}</label>
-            </div>
-          `);
+        <div class="form-check">
+          <input class="form-check-input category" type="checkbox" id="${category}" value="${category}">
+          <label class="form-check-label" for="${category}">${category}</label>
+        </div>
+        `);
         });
 
-        $("#hierarchy").change(function () {
-          const selectedHierarchy = $(this).val();
-          $(".job-card").each(function () {
-            const jobHierarchy = $(this).find(".hierarchy-vagex").text();
-            $(this).toggle(
-              selectedHierarchy === "" ||
-                jobHierarchy.includes(selectedHierarchy)
-            );
-          });
-        });
-
-        $(".category").change(function () {
+        function applyFilters() {
+          const selectedHierarchy = $("#hierarchy").val();
           const selectedCategories = $(".category:checked")
             .map(function () {
               return $(this).val();
@@ -283,6 +273,7 @@
             .get();
 
           $(".job-card").each(function () {
+            const jobHierarchy = $(this).find(".hierarchy-vagex").text();
             const jobCategories = $(this)
               .find(".badge.bg-secondary")
               .map(function () {
@@ -290,14 +281,22 @@
               })
               .get();
 
-            $(this).toggle(
+            const matchesHierarchy =
+              selectedHierarchy === "" ||
+              jobHierarchy.includes(selectedHierarchy);
+            const matchesCategories =
               selectedCategories.length === 0 ||
-                selectedCategories.some((category) =>
-                  jobCategories.includes(category)
-                )
-            );
+              selectedCategories.some((category) =>
+                jobCategories.includes(category)
+              );
+
+            $(this).toggle(matchesHierarchy && matchesCategories);
           });
-        });
+        }
+
+        $("#hierarchy").change(applyFilters);
+
+        $(".category").change(applyFilters);
 
         $("#clear-filters").click(function () {
           $(".category").prop("checked", false);
