@@ -96,10 +96,10 @@ app.post('/auth/validate', async (req, res) => {
 
 app.post('/jobs/report', async (req, res) => {
     await client.connect();
-    const { jobId, observation } = req.body;
+    const { jobId, observation, jobUrl } = req.body;
 
     const tokenDb = await client.db("vagas").collection("reports");
-    tokenDb.insertOne({ jobId, observation });
+    tokenDb.insertOne({ jobId, observation, jobUrl });
 
     await client.close();
 

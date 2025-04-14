@@ -205,7 +205,7 @@
             </span>
             <button class="btn btn-outline-danger btn-sm report-button" id-vaga="${
               job._id
-            }">
+            }" url-vaga="${job.url}">
             <i class="fa-solid fa-exclamation-circle"></i> Reportar
             </button>
           </div>
@@ -310,6 +310,7 @@
 
         $(document).on("click", ".report-button", function () {
           $("#reportModal").attr("id-vaga", $(this).attr("id-vaga"));
+          $("#reportModal").attr("url-vaga", $(this).attr("url-vaga"));
           reportModal.show();
         });
 
@@ -327,6 +328,7 @@
             data: JSON.stringify({
               observation,
               jobId: $("#reportModal").attr("id-vaga"),
+              jobUrl: $("#reportModal").attr("url-vaga"),
             }),
             success: function () {
               alert("Denúncia enviada com sucesso!");

@@ -250,6 +250,7 @@
                   <td>${report.observation}</td>
                   <td>
                     <button class="btn btn-success" onclick="resolveReport('${report._id}')">Dispensar</button>
+                    <button class="btn btn-info" onclick="window.open('${report.jobUrl}', '_blank')">Acessar</button>
                     <button class="btn btn-danger" onclick="deleteReport('${report.jobId}')">Excluir</button>
                   </td>
                 </tr>
